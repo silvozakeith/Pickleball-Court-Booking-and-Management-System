@@ -9,6 +9,6 @@ This repository contains a C++ Data Structures and Algorithms project developed 
 2. **Internet Cafe / Computer Rental Time & Billing System**
    - Automates PC timers, user accounts, prepaid hours, and daily income reports.
 3. **Boarding House Rent & Payment Tracker**
-   - Tracks tenant information, room occupancy, rental due dates, and remaining balances, and generates income reports[cite: 1].
+   - Tracks tenant information, room occupancy, rental due dates, and remaining balances, and generates income reports.
 
 ---
