@@ -6,9 +6,5 @@ This repository contains a C++ Data Structures and Algorithms project developed 
 ### Proposed Systems Covered:
 1. **Pickleball Court Booking & Management System**
    - Manages court reservations, schedules, waitlists, and payment tracking while preventing double-bookings.
-2. **Internet Cafe / Computer Rental Time & Billing System**
-   - Automates PC timers, user accounts, prepaid hours, and daily income reports.
-3. **Boarding House Rent & Payment Tracker**
-   - Tracks tenant information, room occupancy, rental due dates, and remaining balances, and generates income reports.
 
 ---
