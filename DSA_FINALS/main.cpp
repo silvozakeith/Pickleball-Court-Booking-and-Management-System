@@ -17,3 +17,12 @@ struct Booking {
     string contact;
     float fee;
 };
+
+// Modulke 9: Binary search tree
+struct Node {
+    Booking data;
+    Node* left;
+    Node* right;
+    Node(Booking booking) : data(booking), left(nullptr), right(nullptr) {}
+};
+Node* root = nullptr;
