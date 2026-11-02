@@ -26,3 +26,23 @@ struct Node {
     Node(Booking booking) : data(booking), left(nullptr), right(nullptr) {}
 };
 Node* root = nullptr;
+
+// Module 4: Stack and Undo functions
+struct StackNode {
+    Booking data;
+    StackNode* next;
+};
+StackNode* top = nullptr;
+void pushToStack(Booking b) {
+    StackNode* newNode = new StackNode{b, top};
+    top = newNode;
+}
+
+bool popFromStack(Booking &out) {
+    if (!top) return false;
+    StackNode* temp = top;
+    out = temp->data;
+    top = top->next;
+    delete temp;
+    return true;
+}
