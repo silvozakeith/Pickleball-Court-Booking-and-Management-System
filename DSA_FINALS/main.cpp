@@ -46,7 +46,7 @@ bool popFromStack(Booking &out) {
     delete temp;
     return true;
 }
-// ========== KIAN - Module 9: BST Functions ==========
+// Module 9: BST Functions
 Node* insertBST(Node* node, Booking b) {
     if (!node) return new Node(b);
     if (getKey(b) < getKey(node->data))
@@ -56,7 +56,7 @@ Node* insertBST(Node* node, Booking b) {
     return node;
 }
 
-// ========== KIAN - Module 6: Searching ==========
+// Module 6: Searching
 bool searchBST(Node* node, int court, int hour, int min, bool isAM, Booking &result) {
     if (!node) return false;
     int targetTime = to24Hour(hour, isAM) * 100 + min;
