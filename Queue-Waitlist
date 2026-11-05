@@ -24,6 +24,23 @@ bool dequeueWaitlist(string &outName, string &outContact) {
     outName = temp->name;
     outContact = temp->contact;
     qFront = qFront->next;
+
+// ========== HELPER FUNCTIONS ==========
+int to24Hour(int h, bool isAM) {
+    if (isAM) {
+        if (h == 12) return 0;
+        return h;
+    } else {
+        if (h == 12) return 12;
+        return h + 12;
+    }
+}
+
+
+int getKey(Booking b) {
+    int startTotal = to24Hour(b.startHour, b.isStartAM) * 100 + b.startMin;
+    return b.courtNo * 10000 + startTotal;
+}
     if (!qFront) qRear = nullptr;
     delete temp;
     return true;
