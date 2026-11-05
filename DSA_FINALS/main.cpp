@@ -144,9 +144,119 @@ int getKey(Booking b) {
 
 
 
-
-
-
 // main
-void menu () {
-    int
+void menu() {
+    int choice;
+    do {
+        cout << "\n===== PICKLEBALL COURT BOOKING SYSTEM =====\n";
+        cout << "[1] Book Court\n";
+        cout << "[2] View Schedule\n";
+        cout << "[3] Process Waitlist\n";
+        cout << "[4] Search Booking\n";
+        cout << "[5] Undo Last Booking\n";
+        cout << "[0] Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if (choice == 1) {
+            Booking b;
+            cout << "\n--- New Booking ---\n";
+            cout << "Enter Court Number (1-4): ";
+            cin >> b.courtNo;
+            
+            if (b.courtNo < 1 || b.courtNo > 4) {
+                cout << "Error: Only Court 1 to Court 4 are available\n";
+                continue;
+            }
+            
+            cout << "Enter Start Hour (1-12): ";
+            cin >> b.startHour;
+            cout << "Enter Start Minute (00-59): ";
+            cin >> b.startMin;
+            char startPeriod;
+            cout << "AM or PM? Enter A for AM, P for PM: ";
+            cin >> startPeriod;
+            b.isStartAM = (startPeriod == 'A' || startPeriod == 'a');
+            
+            cout << "Enter End Hour (1-12): ";
+            cin >> b.endHour;
+            cout << "Enter End Minute (00-59): ";
+            cin >> b.endMin;
+            char endPeriod;
+            cout << "AM or PM? Enter A for AM, P for PM: ";
+            cin >> endPeriod;
+            b.isEndAM = (endPeriod == 'A' || endPeriod == 'a');
+            
+            int startTotal = to24Hour(b.startHour, b.isStartAM) * 100 + b.startMin;
+            if (startTotal < 800 || startTotal > 2000) {
+                cout << "Error: Operating hours are 8:00 AM to 8:00 PM only\n";
+                continue;
+            }
+            
+            cin.ignore();
+            cout << "Enter Player Name: ";
+            getline(cin, b.playerName);
+            cout << "Enter Contact Information: ";
+            getline(cin, b.contact);
+            cout << "Enter Fee Amount: ";
+            cin >> b.fee;
+
+            Booking check;
+            if (searchBST(root, b.courtNo, b.startHour, b.startMin, b.isStartAM, check)) {
+                cout << "\nThis time slot is already booked. Player added to waitlist.\n";
+                enqueueWaitlist(b.playerName, b.contact);
+            } else {
+                root = insertBST(root, b);
+                pushToStack(b);
+                cout << "\nBooking Confirmed.\n";
+                cout << "Court " << b.courtNo << " reserved for " << b.playerName << "\n";
+            }
+        }
+        else if (choice == 2) {
+            cout << "\n===== Daily Schedule (Sorted by Time) =====\n";
+            displaySorted(root);
+        }
+        else if (choice == 3) {
+            string name, contact;
+            if (dequeueWaitlist(name, contact))
+                cout << "\nNext player on waitlist: " << name << " - " << contact << "\n";
+            else
+                cout << "\nWaitlist is empty\n";
+        }
+        else if (choice == 4) {
+            int court, hour, minute;
+            bool isAM;
+            Booking result;
+            char period;
+            
+            cout << "\n--- Search Booking ---\n";
+            cout << "Enter Court Number (1-4): ";
+            cin >> court;
+            cout << "Enter Start Hour (1-12): ";
+            cin >> hour;
+            cout << "Enter Start Minute (00-59): ";
+            cin >> minute;
+            cout << "AM or PM? Enter A for AM, P for PM: ";
+            cin >> period;
+            isAM = (period == 'A' || period == 'a');
+            
+            if (searchBST(root, court, hour, minute, isAM, result))
+                cout << "\nBooking Found: " << result.playerName 
+                     << " | " << formatTime(result.startHour, result.startMin, result.isStartAM) << "\n";
+            else
+                cout << "\nNo booking found for the selected time slot\n";
+        }
+        else if (choice == 5) {
+            Booking undone;
+            if (popFromStack(undone))
+                cout << "\nUndo Complete. Booking removed for " << undone.playerName << "\n";
+            else
+                cout << "\nNo previous booking to undo\n";
+        }
+    } while (choice != 0);
+}
+
+int main() {
+    menu();
+    return 0;
+}
