@@ -2,9 +2,8 @@
 #include <string>
 using namespace std;
 
-// Pickle ball court booking system
 
-//Module 2: Sturcts and Data types
+//Module 2
 struct Booking {
     int courtNo;
     int startHour;
@@ -18,35 +17,83 @@ struct Booking {
     float fee;
 };
 
-// Modulke 9: Binary search tree
+//Module 9
 struct Node {
     Booking data;
     Node* left;
     Node* right;
-    Node(Booking booking) : data(booking), left(nullptr), right(nullptr) {}
+    Node(Booking b) : data(b), left(nullptr), right(nullptr) {}
 };
 Node* root = nullptr;
 
-// Module 4: Stack and Undo functions
+//Module 4
 struct StackNode {
     Booking data;
     StackNode* next;
 };
-StackNode* top = nullptr;
+StackNode* stackTop = nullptr;
+
 void pushToStack(Booking b) {
-    StackNode* newNode = new StackNode{b, top};
-    top = newNode;
+    StackNode* newNode = new StackNode{b, stackTop};
+    stackTop = newNode;
 }
 
 bool popFromStack(Booking &out) {
-    if (!top) return false;
-    StackNode* temp = top;
+    if (!stackTop) return false;
+    StackNode* temp = stackTop;
     out = temp->data;
-    top = top->next;
+    stackTop = stackTop->next;
     delete temp;
     return true;
 }
-// Module 9: BST Functions
+
+//Module 5
+struct QueueNode {
+    string name;
+    string contact;
+    QueueNode* next;
+};
+QueueNode* qFront = nullptr;
+QueueNode* qRear = nullptr;
+
+void enqueueWaitlist(string n, string c) {
+    QueueNode* newNode = new QueueNode{n, c, nullptr};
+    if (!qRear) {
+        qFront = qRear = newNode;
+        return;
+    }
+    qRear->next = newNode;
+    qRear = newNode;
+}
+
+bool dequeueWaitlist(string &outName, string &outContact) {
+    if (!qFront) return false;
+    QueueNode* temp = qFront;
+    outName = temp->name;
+    outContact = temp->contact;
+    qFront = qFront->next;
+    if (!qFront) qRear = nullptr;
+    delete temp;
+    return true;
+}
+
+//helper function
+int to24Hour(int h, bool isAM) {
+    if (isAM) {
+        if (h == 12) return 0;
+        return h;
+    } else {
+        if (h == 12) return 12;
+        return h + 12;
+    }
+}
+
+int getKey(Booking b) {
+    int startTotal = to24Hour(b.startHour, b.isStartAM) * 100 + b.startMin;
+    return b.courtNo * 10000 + startTotal;
+}
+
+//Module 9
 Node* insertBST(Node* node, Booking b) {
     if (!node) return new Node(b);
     if (getKey(b) < getKey(node->data))
@@ -56,7 +103,7 @@ Node* insertBST(Node* node, Booking b) {
     return node;
 }
 
-// Module 6: Searching
+//Module 6
 bool searchBST(Node* node, int court, int hour, int min, bool isAM, Booking &result) {
     if (!node) return false;
     int targetTime = to24Hour(hour, isAM) * 100 + min;
@@ -73,39 +120,7 @@ bool searchBST(Node* node, int court, int hour, int min, bool isAM, Booking &res
         return searchBST(node->right, court, hour, min, isAM, result);
 }
 
-struct QueueNode {
-    string name;
-    string contact;
-    QueueNode* next;
-};
-QueueNode* qFront = nullptr;
-QueueNode* qRear = nullptr;
-
-
-void enqueueWaitlist(string n, string c) {
-    QueueNode* newNode = new QueueNode{n, c, nullptr};
-    if (!qRear) {
-        qFront = qRear = newNode;
-        return;
-    }
-    qRear->next = newNode;
-    qRear = newNode;
-}
-
-
-bool dequeueWaitlist(string &outName, string &outContact) {
-    if (!qFront) return false;
-    QueueNode* temp = qFront;
-    outName = temp->name;
-    outContact = temp->contact;
-    qFront = qFront->next;
-    if (!qFront) qRear = nullptr;
-    delete temp;
-    return true;
-}
-
-// Module 7 & 8: Display Functions
-
+//Module 7 and 8
 string formatTime(int h, int m, bool isAM) {
     string period = isAM ? "AM" : "PM";
     string minStr = (m < 10) ? "0" + to_string(m) : to_string(m);
@@ -123,28 +138,7 @@ void displaySorted(Node* node) {
     displaySorted(node->right);
 }
 
-// Helper
-int to24Hour(int h, bool isAM) {
-    if (isAM) {
-        if (h == 12) return 0;
-        return h;
-    } else {
-        if (h == 12) return 12;
-        return h + 12;
-    }
-}
-
-
-int getKey(Booking b) {
-    int startTotal = to24Hour(b.startHour, b.isStartAM) * 100 + b.startMin;
-    return b.courtNo * 10000 + startTotal;
-}
-
-
-
-
-
-// main
+//main
 void menu() {
     int choice;
     do {
