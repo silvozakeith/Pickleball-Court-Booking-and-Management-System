@@ -1,0 +1,48 @@
+struct QueueNode {
+    string name;
+    string contact;
+    QueueNode* next;
+};
+QueueNode* qFront = nullptr;
+QueueNode* qRear = nullptr;
+
+
+void enqueueWaitlist(string n, string c) {
+    QueueNode* newNode = new QueueNode{n, c, nullptr};
+    if (!qRear) {
+        qFront = qRear = newNode;
+        return;
+    }
+    qRear->next = newNode;
+    qRear = newNode;
+}
+
+
+bool dequeueWaitlist(string &outName, string &outContact) {
+    if (!qFront) return false;
+    QueueNode* temp = qFront;
+    outName = temp->name;
+    outContact = temp->contact;
+    qFront = qFront->next;
+    if (!qFront) qRear = nullptr;
+    delete temp;
+    return true;
+}
+
+
+// ========== HELPER FUNCTIONS ==========
+int to24Hour(int h, bool isAM) {
+    if (isAM) {
+        if (h == 12) return 0;
+        return h;
+    } else {
+        if (h == 12) return 12;
+        return h + 12;
+    }
+}
+
+
+int getKey(Booking b) {
+    int startTotal = to24Hour(b.startHour, b.isStartAM) * 100 + b.startMin;
+    return b.courtNo * 10000 + startTotal;
+}
