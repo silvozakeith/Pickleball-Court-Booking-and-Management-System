@@ -46,3 +46,16 @@ bool popFromStack(Booking &out) {
     delete temp;
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+// main
+void menu () {
+    int
