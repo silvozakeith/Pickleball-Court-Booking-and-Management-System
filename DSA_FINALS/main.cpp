@@ -104,6 +104,24 @@ bool dequeueWaitlist(string &outName, string &outContact) {
     return true;
 }
 
+// Module 7 & 8: Display Functions
+
+string formatTime(int h, int m, bool isAM) {
+    string period = isAM ? "AM" : "PM";
+    string minStr = (m < 10) ? "0" + to_string(m) : to_string(m);
+    return to_string(h) + ":" + minStr + " " + period;
+}
+
+void displaySorted(Node* node) {
+    if (!node) return;
+    displaySorted(node->left);
+    cout << "Court " << node->data.courtNo 
+         << " | " << formatTime(node->data.startHour, node->data.startMin, node->data.isStartAM)
+         << " to " << formatTime(node->data.endHour, node->data.endMin, node->data.isEndAM)
+         << " | " << node->data.playerName 
+         << " | Fee: P" << node->data.fee << "\n";
+    displaySorted(node->right);
+}
 
 // Helper
 int to24Hour(int h, bool isAM) {
